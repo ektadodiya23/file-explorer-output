@@ -22,7 +22,7 @@ export default function Home() {
   const [openNewFolder, setOpenNewFolder] = useState<boolean>(false);
 
   // display nested item data
-  const folder = useSelector((state: RootState) => state.users.showList);
+  const folder = useSelector((state: RootState) =>  state.users.showList);
 
   // display folder name
   const selectedFolder = useSelector(
@@ -39,18 +39,19 @@ export default function Home() {
   const handleAddFolder = () => {
     setOpenNewFolder(!openNewFolder);
   };
+  
   const handleClose = () => {
     setOpenNewFolder(false);
   };
 
   // add new file or folder in nested
-  const handleInsertNode = (
+    const handleInsertNode = (
     folderId: number,
     item: string,
     isFolder: boolean,
     size: number,
     type: string,
-    lastModifiedDate : number
+    lastModifiedDate: number
   ) => {
     const finalTree = insertNode(
       jsonData,
@@ -64,30 +65,26 @@ export default function Home() {
     dispatch(setJsonData({ data: finalTree, id: folderId }));
   };
 
-
   // delete folder
-  const handleDeleteFolder = () =>{
-      console.log("delete" , selectedFolder?.id); 
-    if(selectedFolder){
-        dispatch(deleteFolder(selectedFolder.id));
-       }
-   }
+  const handleDeleteFolder = () => {
+    console.log("delete", selectedFolder?.id);
+    if (selectedFolder) {
+      dispatch(deleteFolder(selectedFolder.id));
+    }
+  };
 
+  const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#f5f5f9",
+      color: "rgba(0, 0, 0, 0.87)",
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+      border: "1px solid #dadde9",
+    },
+  }));
 
-
-   const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
-     <Tooltip {...props} classes={{ popper: className }} />
-   ))(({ theme }) => ({
-     [`& .${tooltipClasses.tooltip}`]: {
-       backgroundColor: "#f5f5f9",
-       color: "rgba(0, 0, 0, 0.87)",
-       maxWidth: 220,
-       fontSize: theme.typography.pxToRem(12),
-       border: "1px solid #dadde9",
-     },
-   }));
-
-   
   return (
     <>
       <Box maxWidth="xl" sx={{ marginLeft: "10%", marginTop: "2%" }}>
@@ -96,20 +93,28 @@ export default function Home() {
             onClick={handleAddFolder}
             sx={{ marginRight: "1%" }}
             variant="outlined"
+            data-cy="add-folder-btn"
           >
             add folder
           </Button>
-          <Button variant="outlined" onClick={handleDeleteFolder}>
+          <Button
+            variant="outlined"
+            onClick={handleDeleteFolder}
+            data-cy="delete-folder-btn"
+          >
             delete folder
           </Button>
         </Box>
+
         <Box
           sx={{ bgcolor: "#f5f5f5", height: "87vh", marginTop: "2%" }}
           className="app_container"
         >
           {/* folder */}
           <Box className="app_section">
-            <Box sx={{ marginBottom: "7%" }}>FOLDER</Box>
+            <Typography data-cy="text-1" sx={{ marginBottom: "7%" }}>
+              FOLDER
+            </Typography>
             <ParentChild
               handleInsertNode={handleInsertNode}
               explorer={jsonData}
@@ -119,7 +124,10 @@ export default function Home() {
 
           {/* file-details */}
           <Box className="app_section">
-            FILE DETAILS AREA
+            <Typography data-cy="text-2" sx={{ marginBottom: "7%" }}>
+              FILE DETAILS AREA
+            </Typography>
+
             <Box sx={{ marginTop: "10%" }}>
               {!selectedFolder ? (
                 <Typography className="folder_details">
@@ -127,14 +135,19 @@ export default function Home() {
                 </Typography>
               ) : (
                 <Box className="folder_display" sx={{ marginBottom: "3%" }}>
-                  📁Folder-name : <span className="add_folder">{selectedFolder?.name}</span>
+                  📁Folder-name :
+                  <span className="add_folder">{selectedFolder?.name}</span>
                 </Box>
               )}
 
               <Box className="display_folder">
-                {folder?.map((item:Ifolder) => {
+                {folder?.map((item: Ifolder) => {
                   if (item.isFolder && selectedFolder) {
-                    return <Typography key={item.id}>📁{item.name}</Typography>;
+                    return (
+                      <Typography data-cy="display_folder" key={item.id}>
+                        📁{item.name}
+                      </Typography>
+                    );
                   } else {
                     return (
                       <HtmlTooltip
@@ -155,7 +168,9 @@ export default function Home() {
                           </React.Fragment>
                         }
                       >
-                     <Typography  key={item.id}>📄{item.name}</Typography>
+                        <Typography data-cy="display_file" key={item.id}>
+                          📄{item.name}
+                        </Typography>
                       </HtmlTooltip>
                     );
                   }
@@ -167,12 +182,17 @@ export default function Home() {
 
           {/* file-upload-area */}
           <Box className="app_section">
-            DROP AREA
+            <Typography data-cy="text-3" sx={{ marginBottom: "7%" }}>
+              DROP AREA
+            </Typography>
+
             <ImageDisplay />
           </Box>
         </Box>
       </Box>
-      <CreateFolder openDialog={openNewFolder} handleClose={handleClose} />
+      {openNewFolder && (
+        <CreateFolder openDialog={openNewFolder} handleClose={handleClose} />
+      )}
     </>
   );
 }

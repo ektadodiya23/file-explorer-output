@@ -40,7 +40,6 @@ const findNestedFolder = (value: Ifolder[], folderId: number): Ifolder[] => {
   // return null;
 };
 
-
 const removeSelectedItems = (value: Ifolder[], folderId: number) => {
   return value.filter((folder) => {
     // match folderId
@@ -88,7 +87,7 @@ const userReducer = createSlice({
           id: new Date().getTime(),
           files: [action.payload],
         };
-        state.uploadedFiles = {...uploadFile}
+        state.uploadedFiles = { ...uploadFile };
       } else {
         state.uploadedFiles.files = [
           ...state.uploadedFiles.files,
@@ -96,8 +95,8 @@ const userReducer = createSlice({
         ];
       }
     },
-    
-    // remove file 
+
+    // remove file
     removeFile: (state) => {
       state.uploadedFiles = null;
     },

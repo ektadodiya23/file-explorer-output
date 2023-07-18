@@ -25,7 +25,7 @@ const explorer: Ifolder[] = [
         isOpen:true,
         name: "public",
         isFolder: true,
-        size : 456  ,
+        size : 456 ,
         type : "folder",
        lastModifiedDate : 1/1/2023,
         items: [

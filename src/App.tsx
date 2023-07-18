@@ -5,11 +5,6 @@ import Home from './Component/filefolder/Home';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 
-// interface ListItem {
-//   text: string;
-//   children?: ListItem[];
-// }
-
 function App() {
   
   return (

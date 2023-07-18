@@ -77,6 +77,7 @@ const handleSubmit = (e: any) => {
             <DialogContentText id="alert-dialog-slide-description">
               <FormControl>
                 <TextField
+                  data-cy="new-folder-input"
                   autoFocus
                   margin="dense"
                   id="name"
@@ -94,6 +95,7 @@ const handleSubmit = (e: any) => {
               sx={{ marginTop: "5%", marginRight: "8%" }}
               type="submit"
               variant="outlined"
+              data-cy="submit-folder-btn"
             >
               Add
             </Button>

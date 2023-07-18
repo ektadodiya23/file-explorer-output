@@ -1,4 +1,11 @@
-import { Alert, AlertTitle, Box, Button, IconButton, Typography } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import React, { useRef, useState } from "react";
 import "./style.css";
 
@@ -43,6 +50,11 @@ export default function ImageDisplay() {
     document.getElementById("fileInput")?.click();
   };
 
+  const handleDropSecondImg = () => {
+    document.getElementById("fileInputNormal")?.click();
+  };
+
+  // select any file
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files;
     const selectedFileArray = Array.from(selectedFiles || []);
@@ -62,11 +74,9 @@ export default function ImageDisplay() {
         );
         console.log("tree", finalTree);
         dispatch(setJsonData({ data: finalTree, id: selectedFolder.id }));
-       
       }
-      
     }
-      setFileUpload((prev) => ({ ...prev, files: updatedFiles }));
+    setFileUpload((prev) => ({ ...prev, files: updatedFiles }));
   };
 
   // drop-any-file
@@ -78,7 +88,7 @@ export default function ImageDisplay() {
       for (const file of droppedFiles) {
         const reader = new FileReader();
         reader.onload = (event: ProgressEvent<FileReader>) => {
-         dispatch(uploadFolderList(file));
+          dispatch(uploadFolderList(file));
 
           const finalTree = insertNode(
             data,
@@ -90,12 +100,10 @@ export default function ImageDisplay() {
             file.lastModified
           );
           dispatch(setJsonData({ data: finalTree, id: selectedFolder.id }));
-        
-          };
+        };
         reader.readAsDataURL(file);
-         setIsFileUploaded(true);
-       }
-      
+        setIsFileUploaded(true);
+      }
     } else {
       alert("Please select a folder!!");
       setFileUpload({ files: [] });
@@ -107,12 +115,13 @@ export default function ImageDisplay() {
     e.preventDefault();
   };
 
-  const handleCloseAlert = ()=> {
+  const handleCloseAlert = () => {
     setIsFileUploaded(false);
-  }
+  };
 
   return (
     <>
+      {/* alert box display  */}
       <Box>
         {isFileUploaded && (
           <Alert
@@ -125,7 +134,6 @@ export default function ImageDisplay() {
         )}
       </Box>
 
-
       <Box onDrop={handleDrop} onDragOver={handleDragOver}>
         {uploadList && uploadList.files.length > 0 ? (
           <>
@@ -133,7 +141,7 @@ export default function ImageDisplay() {
               className="input_box"
               style={{ display: "none" }}
               type="file"
-              id="fileInput"
+              id="fileInputNormal"
               onChange={handleFileChange}
               multiple
               accept="image/png, image/jpeg , .tsx , .jsx , .html , .js , .ts , .txt , .css"
@@ -141,7 +149,7 @@ export default function ImageDisplay() {
 
             <Button
               sx={{ marginTop: "7%", marginLeft: "50%" }}
-              onClick={handleDropImg}
+              onClick={handleDropSecondImg}
             >
               <FileUploadIcon />
             </Button>
@@ -154,6 +162,7 @@ export default function ImageDisplay() {
           {!uploadList && (
             <Box mt={1}>
               <input
+                data-cy="img_upload"
                 className="input_box"
                 style={{ display: "none" }}
                 type="file"
@@ -165,7 +174,9 @@ export default function ImageDisplay() {
               <IconButton className="icon_plus" onClick={handleDropImg}>
                 <DriveFolderUploadIcon sx={{ fontSize: "80px" }} />
               </IconButton>
-              <Typography>No images / files selected</Typography>
+              <Typography data-cy="image_upload">
+                No images / files selected
+              </Typography>
             </Box>
           )}
 
@@ -189,7 +200,9 @@ export default function ImageDisplay() {
                 ) : (
                   <span>📄{file.name}</span>
                 )}
-                <Typography variant="body2">file-name: {file.name}</Typography>
+                <Typography data-cy="image_name" variant="body2">
+                  file-name: {file.name}
+                </Typography>
               </Box>
             ))}
           </Box>

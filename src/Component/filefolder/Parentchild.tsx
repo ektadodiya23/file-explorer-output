@@ -17,7 +17,9 @@ type Idata = {
 };
 
 export default function ParentChild(props: Idata) {
+
   const { explorer, handleInsertNode } = props;
+  
   const [show, setShow] = useState<any>(false);
   const [selected, setSelected] = useState<any>(0);
   const [showInput, setShowInput] = useState<any>({
@@ -44,13 +46,15 @@ export default function ParentChild(props: Idata) {
       isFolder,
     });
   };
-
-  const onAddFolder = (e: any) => {
+ 
+   const onAddFolder = (e: any) => {
     if (e.keyCode === 13 && e.target.value) {
       handleInsertNode(selected, e.target.value, showInput.isFolder, selected.size, selected.type, selected.lastModifiedDate);
       setShowInput({ ...showInput, visible: false });
     }
-  };
+   };
+   
+
 
   return (
     <Box>
@@ -69,12 +73,16 @@ export default function ParentChild(props: Idata) {
                   {folder.name}
                   <Box>
                     <Button
+                      data-cy="add-folder"
                       type="submit"
                       onClick={(e) => handleNewFolder(e, true)}
                     >
                       Folder +
                     </Button>
-                    <Button onClick={(e) => handleNewFolder(e, false)}>
+                    <Button
+                      data-cy="add-file"
+                      onClick={(e) => handleNewFolder(e, false)}
+                    >
                       File +
                     </Button>
                   </Box>
@@ -87,6 +95,7 @@ export default function ParentChild(props: Idata) {
                     <div className="inputContainer">
                       <span>{showInput.isFolder ? "📁" : "📄"}</span>
                       <input
+                        data-cy="add-folder-input"
                         name="name"
                         type="text"
                         className="inputContainer__input"
@@ -99,7 +108,7 @@ export default function ParentChild(props: Idata) {
                     </div>
                   )}
                   {folder.isOpen && (
-                    <div style={{ paddingLeft: "3%" }}>
+                    <div data-cy="new-add-folder" style={{ paddingLeft: "3%" }}>
                       <ParentChild
                         key={folder.id}
                         handleInsertNode={handleInsertNode}
@@ -114,7 +123,7 @@ export default function ParentChild(props: Idata) {
         } else {
           return (
              <ul>
-              <li className="file" key={folder?.id}>
+              <li data-cy="file-name" className="file" key={folder?.id}>
                 📄{folder.name}
               </li>
             </ul>
